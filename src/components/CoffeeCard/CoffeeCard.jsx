@@ -70,7 +70,7 @@ export default CoffeeCard;
 CoffeeCard.propTypes = {
     coffee: PropTypes.object,
     coffees: PropTypes.array,
-    setCoffees: PropTypes.node,
+   
     
     
 }

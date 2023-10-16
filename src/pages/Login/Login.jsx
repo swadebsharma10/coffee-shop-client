@@ -1,6 +1,10 @@
+import { useContext } from "react";
+import { AuthContext } from "../../Provider/AuthProvider";
 
 
 const Login = () => {
+
+  const {logInUser} = useContext(AuthContext);
 
     const handleSubmit = event =>{
         event.preventDefault();
@@ -8,7 +12,32 @@ const Login = () => {
 
         const email = form.email.value;
         const password = form.password.value;
-        console.log(email, password)
+        console.log(email, password);
+        // sign in user
+        logInUser(email, password)
+        .then(result =>{
+          console.log('logged user', result.user);
+          //Passing data to the server
+          const user ={
+            email,
+            lastLoggedAt: result.user?.metadata?.lastSignInTime
+          }
+          // update lastLogged in the dataBase
+          fetch('http://localhost:5000/user', {
+            method: 'PATCH',
+            headers:{
+              'content-type': 'application/json'
+            },
+            body: JSON.stringify(user)
+          })
+          .then(res => res.json())
+          .then(data =>{
+            console.log(data)
+          })
+        })
+        .catch(error =>{
+          console.log(error.message)
+        })
 
     }
 
